@@ -10,6 +10,8 @@ export default StyleSheet.create({
     padding: 15,
     backgroundColor: 'green',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerTxt: {
     fontSize: 18,

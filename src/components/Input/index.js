@@ -19,6 +19,7 @@ export default function Register(props) {
     isEditable,
     placeholderText,
     isSecure,
+    numberOfLines
   } = props;
 
   return (
@@ -30,6 +31,8 @@ export default function Register(props) {
       value={inputValue}
       keyboardType={keyboardType}
       editable={isEditable}
+      numberOfLines={numberOfLines}
+
     />
   );
 }
