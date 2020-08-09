@@ -6,11 +6,23 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {Screens} from './src/containers';
 import Navigator from './src/navigator/stack';
+import {Components} from './src/components';
+
+import io from 'socket.io-client';
 
 export default function App() {
-  return <Navigator />;
+  // useEffect(() => {
+  //   this.socket = io('http://192.168.1.102:8080/');
+  // });
+
+  return (
+    <>
+      {/* <Components.CheckInternet /> */}
+      <Navigator />
+    </>
+  );
 }

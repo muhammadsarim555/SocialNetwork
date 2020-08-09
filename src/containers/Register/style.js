@@ -23,10 +23,19 @@ export default StyleSheet.create({
     borderWidth: 2,
     alignSelf: 'center',
     margin: 30,
-    width: 100,
-    height: 100,
-    alignItems: 'stretch',
+    width: 120,
+    height: 120,
+    justifyContent: 'center',
     borderRadius: 100,
+  },
+
+  profileImage: {
+    alignItems: 'center',
+    width: 110,
+    height: 110,
+    alignSelf: 'center',
+    borderRadius: 50,
+    justifyContent: 'center',
   },
 
   inputBar: {

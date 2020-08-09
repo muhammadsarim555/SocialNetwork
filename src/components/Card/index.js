@@ -43,14 +43,7 @@ export default class Card extends React.Component {
   };
 
   pass = (value, ind) => {
-    let array = [];
-    let obj = {};
     const {dataSource} = this.state;
-
-    obj.id = value.id;
-    // obj.liked = ;
-
-    // this.setState({dataSource})
 
     value.liked = value.liked ? false : true;
     value.total_likes = value.liked
@@ -105,7 +98,7 @@ export default class Card extends React.Component {
               <AnimatedIcon
                 ref={this.handleSmallAnimatedIconRef}
                 name={item.liked ? 'heart' : 'hearto'}
-                color={item.liked ? '#e92f3c' : '#515151'}
+                color={item.liked ? '#e92f3c' : iconColor}
                 size={iconSize}
                 style={styles.icon}
               />

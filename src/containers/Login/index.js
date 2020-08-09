@@ -5,22 +5,53 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  Alert,
 } from 'react-native';
 
 import CheckBox from 'react-native-check-box';
 
 import styles from './style';
 import {Components} from '../../components';
+import {userLogin} from '../../config/SimpleApiCalls';
 
 export default function Login({navigation}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('abc1@gmail.com');
+  const [password, setPassword] = useState('sisisiisis');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  //   alert(JSON.stringify(props.navigation));
+  function handleLogin() {
+    setIsLoading(true);
+
+    const payload = {
+      email,
+      password,
+    };
+
+    userLogin(payload)
+      .then((res) => {
+        setIsLoading(false), navigation.navigate('Home');
+        console.log(res);
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        Alert.alert(
+          'Error',
+          error.response.data.message,
+          [
+            {
+              text: 'ok',
+              onPress: () => {
+                console.log('ok');
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      });
+  }
 
   return (
     <View style={styles.container}>
@@ -63,11 +94,10 @@ export default function Login({navigation}) {
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        style={styles.header}
-        onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.header} onPress={() => handleLogin()}>
         <Text style={styles.headerTxt}>Login </Text>
       </TouchableOpacity>
+      {isLoading && <Components.SpinnerLoader isLoading={isLoading} />}
     </View>
   );
 }
