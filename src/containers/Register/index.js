@@ -40,13 +40,22 @@ export default function Register({navigation}) {
         // You can also display the image using data:
         const source = {uri: 'data:image/jpeg;base64,' + response.data};
 
+        const uri = response.uri;
+        const type = response.type;
+        const name = response.fileName;
+        const ImageSource = {
+          uri,
+          type,
+          name,
+        };
+
         setProfileImage(source);
-        setUploadImage(response);
+        setUploadImage(ImageSource);
       }
     });
   }
 
-  function handleRegister() {
+  function handleRegister(ImageSource) {
     setIsLoading(true);
 
     let formdata = new FormData();
@@ -55,30 +64,46 @@ export default function Register({navigation}) {
     formdata.append('lastName', lastName);
     formdata.append('firstName', firstName);
     formdata.append('password', password);
-    formdata.append('profile_image', profileImage);
+    formdata.append('profile_image', uploadImage);
 
     // console.log(formdata);
 
     userRegister(formdata)
       .then((res) => {
         setIsLoading(false), navigation.navigate('Home');
-        console.log(res);
       })
       .catch((error) => {
         setIsLoading(false);
-        Alert.alert(
-          'Error',
-          error?.response?.data.message,
-          [
-            {
-              text: 'ok',
-              onPress: () => {
-                console.log('ok');
-              },
-            },
-          ],
-          {cancelable: false},
-        );
+        // if (error.response) {
+        //   // Request made and server responded
+        //   console.log(error.response.data);
+        //   console.log(error.response.status);
+        //   console.log(error.response.headers);
+        // } else if (error.request) {
+        //   // The request was made but no response was received
+        //   console.log(error.request);
+        // } else {
+        //   // Something happened in setting up the request that triggered an Error
+        //   console.log('Error', error.message);
+        // }
+        // console.log('error', error);
+        // setIsLoading(false);
+        // Alert.alert(
+        //   'Error',
+        //   error?.Error,
+
+        //   // error?.response?.data.message,
+        //   [
+        //     {
+        //       text: 'ok',
+        //       onPress: () => {
+        //         console.log('ok');
+        //       },
+        //     },
+        //   ],
+        //   {cancelable: false},
+        // );
+        console.log(error);
       });
   }
 

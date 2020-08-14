@@ -13,6 +13,7 @@ import CheckBox from 'react-native-check-box';
 import styles from './style';
 import {Components} from '../../components';
 import {userLogin} from '../../config/SimpleApiCalls';
+import {setCurrentUser} from '../../config/WebServices';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('abc1@gmail.com');
@@ -32,11 +33,12 @@ export default function Login({navigation}) {
 
     userLogin(payload)
       .then((res) => {
+        setCurrentUser(res.data.login_user[0]);
         setIsLoading(false), navigation.navigate('Home');
-        console.log(res);
+        console.log(user);
       })
       .catch((error) => {
-        setIsLoading(false)
+        setIsLoading(false);
         Alert.alert(
           'Error',
           error.response.data.message,

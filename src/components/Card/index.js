@@ -28,9 +28,9 @@ export default class Card extends React.Component {
     dataSource: [],
   };
 
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.props.data,
+      dataSource: nextProps.data,
     });
   }
 
@@ -46,11 +46,14 @@ export default class Card extends React.Component {
     const {dataSource} = this.state;
 
     value.liked = value.liked ? false : true;
-    value.total_likes = value.liked
+    value.total_likes = value?.liked
       ? value.total_likes + 1
       : value.total_likes - 1;
 
+    // console.log('value.total_likes', value.total_likes);
+
     this.smallAnimatedIcon.bounceIn();
+    this.props.onPress(value);
 
     this.setState((prevState) => ({liked: !prevState.liked, ...dataSource}));
   };
@@ -60,7 +63,6 @@ export default class Card extends React.Component {
     let obj = {};
 
     this.pass(value, ind);
-    this.props.onPress('anc');
   };
 
   renderItem = (data, ind) => {
@@ -68,12 +70,21 @@ export default class Card extends React.Component {
 
     let {item} = data;
 
+    console.log('itemutme', item);
+
     return (
       <View style={styles.inputBar}>
         <View style={styles.cardHeader}>
           <View style={{flexDirection: 'row'}}>
-            <View style={styles.profileThumbnail}></View>
-            <Text style={styles.profileUserName}>{item?.name}</Text>
+            <View style={styles.profileThumbnail}>
+              <Image
+                source={{
+                  uri: `http://192.168.1.101:8080/${item?.userId.profile_image}`,
+                }}
+                style={styles.profileThumbnail}
+              />
+            </View>
+            <Text style={styles.profileUserName}>{item?.userId.firstName}</Text>
           </View>
           <Icon name="more-vertical" size={iconSize} color={iconColor} />
         </View>
@@ -83,10 +94,8 @@ export default class Card extends React.Component {
             onPress={() => this.passData(item, data.index)}>
             <Image
               source={{
-                uri:
-                  'https://images.pexels.com/photos/2753490/pexels-photo-2753490.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                uri: `http://192.168.1.101:8080/${item?.post_image}`,
               }}
-              resizeMode="contain"
               style={styles.imageStyle}
             />
           </TouchableOpacity>
@@ -125,7 +134,9 @@ export default class Card extends React.Component {
 
         <View style={styles.cardDescription}>
           <Text style={styles.totalLikes}>{item.total_likes} Likes</Text>
-          <SeeMore numberOfLines={2}>{item.description}</SeeMore>
+          {/* <SeeMore numberOfLines={2}>
+            {item?.caption ? item?.caption : null}
+          </SeeMore> */}
         </View>
       </View>
     );

@@ -5,50 +5,55 @@ import {
   ScrollView,
   View,
   Text,
-  FlatList,
+  RefreshControl,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 import Icon from 'react-native-vector-icons/Ionicons';
+import LogoutIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './style';
 import {Components} from '../../components';
+import {getPost} from '../../config/SimpleApiCalls';
 
 export default function Home({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [dataSource, setDataSource] = useState([
-    {
-      name: 'test',
-      total_likes: 10,
-      description:
-        'helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good ',
-      id: '12321',
-      liked: false,
-    },
-    {
-      name: 'ali ka',
-      total_likes: 12,
-      description:
-        'helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good ',
+  const [dataSource, setDataSource] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-      id: '12321222',
-      liked: true,
-    },
-    {
-      name: 'name ksf',
-      total_likes: 19,
-      description:
-        'helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good helo i am good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good good helo i am goodhelo i am goodhelo i am goodhelo i am good ',
+  React.useEffect(() => {
+    getPosts();
+  }, []);
 
-      id: '1232122209',
-      liked: false,
-    },
-  ]);
-  const [isChecked, setIsChecked] = useState(false);
+  function getPosts(refresher) {
+    refresher && setRefreshing(true);
+
+    getPost()
+      .then((res) => {
+        setDataSource(res.data);
+        setRefreshing(false);
+      })
+      .catch((error) => console.log('error', error));
+  }
 
   function handleChildClick(e) {
-    // alert(e);
+    // alert(JSON.stringify(e));
+    console.log('eventevent ', e);
+  }
+
+  async function logoutUser(e) {
+    try {
+      await AsyncStorage.removeItem('current_user');
+      // return true;
+      setTimeout(() => {
+        navigation.navigate('Login');
+      }, 1000);
+    } catch (exception) {
+      return false;
+    }
   }
 
   return (
@@ -57,11 +62,24 @@ export default function Home({navigation}) {
         <View>
           <Text style={styles.headerTxt}>Home</Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('AddPost')}>
-          <Icon name="add-circle-outline" size={25} color="white" />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddPost')}>
+            <Icon name="add-circle-outline" size={25} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginLeft: 20}} onPress={logoutUser}>
+            <LogoutIcon name="logout" size={25} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        refreshControl={
+          <RefreshControl
+            style={{backgroundColor: 'transparent'}}
+            refreshing={refreshing}
+            onRefresh={() => getPosts(true)}
+          />
+        }>
         <View style={styles.bodyContainer}>
           <View style={styles.inputContainer}>
             <Components.Card onPress={handleChildClick} data={dataSource} />

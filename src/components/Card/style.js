@@ -49,5 +49,12 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  imageStyle: {width: width * 1, height: height * 0.5},
+  imageStyle: {
+    width: width * 1,
+    resizeMode: 'contain',
+    height: '100%',
+    overflow: 'hidden',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
 });

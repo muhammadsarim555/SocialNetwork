@@ -21,12 +21,10 @@ const userRegister = (data) => {
     axios
       .post(`${register_api}`, data, {
         headers: {
-          // Authorization: accessToken,
-          'Content-Type': 'multipart/form-data',
-          // 'cache-control': 'no-cache',
-          // processData: false,
-          // contentType: false,
-          // mimeType: 'multipart/form-data',
+          'Access-Control-Allow-Headers':
+            'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type',
+          "Accept": 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
       })
       .then((response) => {
@@ -39,12 +37,16 @@ const userRegister = (data) => {
 };
 
 const addPost = (data) => {
+
   return new Promise((resolve, reject) => {
     axios
       .post(`${add_post}`, data, {
         headers: {
-          Authorization: accessToken,
-          'Content-Type': 'multipart/form-data;',
+          'Access-Control-Allow-Headers':
+            'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type',
+          "Accept": 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
       })
       .then((response) => {
